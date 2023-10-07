@@ -3,131 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shwehinnthar</title>
+    <title>Beautiful Webpage</title>
     <style>
+        /* CSS styles for your webpage */
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
             margin: 0;
             padding: 0;
-            background-color: #f2f2f2;
         }
 
         header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
             text-align: center;
-            background-color: #fff;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-            padding: 3px;
-        }
-
-        header img {
-            max-width: 110px;
         }
 
         h1 {
-            margin: 0;
-            padding: 0;
-            color: green;
+            font-size: 36px;
         }
 
-        h2, h3 {
-            background-color: #F44336;
+        nav {
+            background-color: #444;
             color: #fff;
-            padding: 5px;
-            margin: 10px 0;
-            text-align: center;
-        }
-
-        .container {
             text-align: center;
             padding: 10px;
         }
 
-        .video-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
             text-align: center;
-        }
-
-        .channel-image {
-            width: 150px;
-            height: 100px;
-            cursor: pointer;
-        }
-
-        #videoPlayer {
-            display: none;
-            width: 100%;
-        }
-
-        #youtubePlayer {
-            width: 100%;
-        }
-
-        .cover-image {
-            width: 150px;
-            height: 100px;
-            cursor: pointer;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
     <header>
-        <img src="logo.jpg" alt="Logo">
-        <h1>Shwehinnthar</h1>
+        <h1>Welcome to My Beautiful Webpage</h1>
     </header>
+
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
     <div class="container">
-        <h2>Live TV</h2>
-        <center><video id="videoPlayer" controls></video></center>
-        <br>
-        <img class="channel-image" src="mntv.png" alt="MNTV" onclick="playChannel('http://l1-xl1.myanmarnet.com/relay/mntv/ch1/stream.m3u8')">
-
-        <img class="channel-image" src="mahar.jpg" alt="Mahar" onclick="playChannel('http://l1-xl1.myanmarnet.com/relay/mahar/ch1/stream.m3u8')">
-            
-       <img class="channel-image" src="channelk.png" alt="CHANNEL-K" onclick="playChannel('https://l1-xl1.myanmarnet.com/relay/channelk/ch1/stream_hi/index.m3u8')">
-            
-        <img class="channel-image" src="sport.jpg" alt="SPORT" onclick="playChannel('https://tv.mahar.live/esports/mahar.stream/playlist.m3u8')">
-  
-        <img class="channel-image" src="mrtv.jpg" alt="MRTV" onclick="playChannel('https://5a13fe32ef748.streamlock.net/mmplay/mrtv-entertainment/playlist.m3u8')">
-            
-           <img class="channel-image" src="nrc.png" alt="NRC" onclick="playChannel('https://player.twitch.tv/?channel=channelmrtv&parent=twitch.tv')">
-
- <img class="channel-image" src="mrtv.png" alt="NEWS" onclick="playChannel('https://player.twitch.tv/?channel=mrtvnewslive&parent=twitch.tv')">
-<img class="channel-image" src="mitv.png" alt="NEWS" onclick="playChannel('https://5a13fe32ef748.streamlock.net/mmplay/mitv/playlist.m3u8?
-wmsAuthSign=c2VydmVyX3RpbWU9MTAvNy8yMDIzIDEyOjEzOjEwIEFNJmhhc2hfdmFsdWU9WEFUN1RZMGEwTzhPM25EZGovdjIzZz09JnZhbGlkbWludXRlcz02MCZzdHJtX2xlbj0xMQ==')">
-
-        <h3>Live Movies</h3>
-        <div class="video-container">
-            <div id="mainView"></div><br>
-            <div id="coverImages">
-            </div>
-        </div>
+        <h2>About Us</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consectetur libero sit amet justo vehicula, eu semper lorem malesuada. Aenean nec nisi nec metus facilisis vestibulum a nec purus. Donec tincidunt, mi eu laoreet hendrerit, mi arcu dapibus mi, a sollicitudin ipsum tortor in enim.</p>
     </div>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script>
-        var videoPlayer = document.getElementById('videoPlayer');
 
-        function playChannel(channelUrl) {
-            videoPlayer.style.display = 'block';
-            var hls = new Hls();
-            hls.loadSource(channelUrl);
-            hls.attachMedia(videoPlayer);
-            hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                videoPlayer.play();
-            });
-        }
-
-        var coverImages = document.querySelectorAll('.cover-image');
-        coverImages.forEach(function (coverImage) {
-            coverImage.addEventListener('click', function () {
-                var videoId = coverImage.getAttribute('data-video');
-                playChannel(videoId);
-            });
-        });
-    </script>
+    <footer>
+        &copy; 2023 My Beautiful Webpage
+    </footer>
 </body>
 </html>
