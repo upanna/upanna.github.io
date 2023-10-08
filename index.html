@@ -1,116 +1,72 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>တိပိဋက</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pannasiri's Bio</title>
     <style>
-        body {background-color: lightyellow;
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {background-color: #a20300;   
-        text-align: center; color: yellow;
-	padding: 15px;
+
+body, html {
+    margin: 0;
+    padding: 0;
 }
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .tab {
-            margin: 0 10px;
-            cursor: pointer;
-            padding: 5px 10px;
-            border: 1px solid #0077cc;
-            border-radius: 5px;
-        }
-        .tab:hover {
-            background-color: #0077cc;
-            color: white;
-        }
-        .content {
-            display: none;
-        }
-        .active {
-            display: block;
-        }
-h3 {text-align: right;}
-    </style>
+
+h1 {background-color: #a20300; color: yellow; 
+text-align: center; font-size: 20px;}
+
+/* Style the container to center the columns */
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+/* Style the columns */
+.column {
+    flex: 1;
+    padding: 20px;
+    background-color: lightyellow;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Add some spacing between columns */
+.column + .column {
+    margin-left: 10px;
+}
+
+/* Style images within the columns */
+.media {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px; /* Set the maximum height for images */
+}
+
+/* Style the headings */
+h2 {
+    font-size: 15px;
+    color: #333;
+    margin-top: 10px;
+}
+</style>
 </head>
 <body>
-    <h1>တိပိဋကပါဠိ အဋ္ဌကထာ ဋီကာ</h1>
-<h3>အရှင်ပညာသီရိ(ဓမ္မဒူတဗုဒ္ဓတက္ကသိုလ်) မှ ရေးသားဖန်တီးသည်</h3>
-    <div class="tabs">
-        <div class="tab" onclick="showContent('ဝိနယပိဋက')">ဝိနယပိဋက</div>
- <div class="tab" onclick="showContent('သုတ္တန္တပိဋက')">သုတ္တန္တပိဋက</div>
-        <div class="tab" onclick="showContent('အဘိဓမ္မာပိဋက')">အဘိဓမ္မာပိဋက</div>
- <div class="tab" onclick="showContent('စာကြည့်တိုက်နှင့်သုတေသနဌာန')">စာကြည့်တိုက်နှင့်သုတေသနဌာန</div>
- <div class="tab" onclick="showContent('အထွေထွေမှတ်စု')">အထွေထွေမှတ်စု</div>
+<h1>ဘဒ္ဒန္တ ပညာသိရီ(သာသနဓဇဓမ္မစရိယ၊ Diploma, B.A, M.A, M.Phil & Ph.D-Thesis) ၏ ဘဝပုံရိပ် မှတ်တမ်းနှင့် ထေရုပ္ပတ္တိအကျဉ်း</h1>
+    <div class="container">
+        <div class="column">
+            <img src="1.jpg" alt="Image 1" class="media">
+            <h2>ပါချုပ်ဆရာတော်ကြီးမှ Diploma အောင်လက်မှတ်အပ်နှံနေစဉ်</h2>
+        </div>
+        <div class="column">
+            <img src="3.jpg" alt="Image 2" class="media">
+            <h2>သီတဂူဆရာတော်ကြီးမှ M.A ဘွဲ့လက်မှတ် ပေးအပ်နေစဉ်</h2>
+        </div>
+        <div class="column">
+            <img src="2.jpg" alt="Image 3" class="media">
+            <h2>ဒေါက်တာ ဓမ္မသာမိမှ B.A ဘွဲ့လက်မှတ်အပ်နှံနေစဉ်</h2>
+        </div>
     </div>
-
-    <div id="ဝိနယပိဋက" class="content">
-        <h2>ဝိနယပိဋက</h2>
-        <ul>
-            <li>ပါရာဇိကပါဠိ</li>
-            <li>ပါစိတ္တယပါဠိ</li>
-            <li>မဟာဝါပါဠိ</li>
-            <li>စူဠဝါပါဠိ</li>
-	<li>ပရိဝါဠပါဠိ</li>
-        </ul>
-<p>ဝိနည်းသည် ရဟန်းသံဃာတော်များအတွက် လိုက်နာကျင့်သုံးရမည် ကျင့်ဝတ်ဖြစ်သည်။</p>
-    </div>
-
-<div id="သုတ္တန္တပိဋက" class="content">
-        <h2>နိကာယငါးရပ်</h2>
-        <ul>
-            <li>ဒီဃနိကာယ်</li>
-            <li>မဇ္ဈိမနိကာယ</li>
-            <li>သံယုတ္တနိကာယ်</li>
- 	<li>အင်္ုတရနိကာယ်</li>
-	<li>ခုဒ္ဒကနိကာယ်</li>
-        </ul>
-<p>သုတ္တန်သည် ရဟန်းသံဃာတော်များအတွက် လိုက်နာကျင့်သုံးရမည် ဒေသနာတော်ဖြစ်သည်။</p>
-    </div>
-
-    <div id="အဘိဓမ္မာပိဋက" class="content">
-        <h2>အဘိဓမ္မာပိဋက</h2>
-        <ul>
-            <li>ဓမ္မသင်္ဂဏီပါဠိ</li>
-            <li>ဝိဘင်္ဂပါဠိ</li>
-            <li>ဓာတုကထာပါဠိ</li>
-            <li>ပုဂ္ဂလပညတ္တိပါဠိ</li>
-<li>ကထာဝတ္ထုပါဠိ</li>
-            <li>ယမကပါဠိ</li>
-            <li>ပဋ္ဌာန</li>
-        </ul>
-<p>ပညာသည် ရဟန်းသံဃာတော်များအတွက် စိတ်ဓါတ်နှင့်ပညာ ဖြစ်သည်။</p>
-    </div>
-
-<div id="စာကြည့်တိုက်နှင့်သုတေသနဌာန" class="content">
-        <h2>သုတေသနဌာန</h2>
-        <ul>
-            <li>ဝိနယဌာန</li>
-            <li>သုတ္တန်ဌာန</li>
- 	<li>အဘိဓမ္မာဌာန</li>
-        </ul>
-    </div>
-
-<div id="အထွေထွေမှတ်စု" class="content">
-        <h2>မှတ်စုအဖြာဖြာ</h2>
-        <ul>
-            <li>နည်းပညာ</li>
-            <li>စာပေ</li>
-            <li>လေ့ကျင့်ရေး</li>
-        </ul>
-    </div>
-
-    <script>
-        function showContent(tabName) {
-            var content = document.getElementsByClassName("content");
-            for (var i = 0; i < content.length; i++) {
-                content[i].style.display = "none";
-            }
-            document.getElementById(tabName).style.display = "block";
-        }
-    </script>
 </body>
 </html>
