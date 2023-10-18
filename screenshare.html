@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Recorder</title>
+    <style>
+        video {
+            width: 100%;
+            max-height: 300px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Screen Recorder</h1>
+    <button id="startRecord">Start Recording</button>
+    <button id="stopRecord" disabled>Stop Recording</button>
+    <button id="saveButton" disabled>Save to Devices</button>
+    <video id="videoElement" autoplay></video>
+
+    <script>
+        const videoElement = document.getElementById('videoElement');
+        const startRecordButton = document.getElementById('startRecord');
+        const stopRecordButton = document.getElementById('stopRecord');
+        const saveButton = document.getElementById('saveButton');
+        let mediaRecorder;
+        let recordedChunks = [];
+
+        startRecordButton.addEventListener('click', startRecording);
+        stopRecordButton.addEventListener('click', stopRecording);
+        saveButton.addEventListener('click', saveVideo);
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = handleDataAvailable;
+                mediaRecorder.start();
+                startRecordButton.disabled = true;
+                stopRecordButton.disabled = false;
+                saveButton.disabled = true;
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                startRecordButton.disabled = false;
+                stopRecordButton.disabled = true;
+                saveButton.disabled = false;
+            }
+        }
+
+        function handleDataAvailable(event) {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        }
+
+        async function saveVideo() {
+            if (recordedChunks.length > 0) {
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                const url = window.URL.createObjectURL(blob);
+                videoElement.src = url;
+                videoElement.controls = true;
+                videoElement.play();
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'recorded-video.webm';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        }
+    </script>
+</body>
+</html>
