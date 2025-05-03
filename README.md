@@ -1,2 +1,2 @@
-# myannet.github.io
-Welcome to Myannet
+# panna.github.io
+Welcome to panna
