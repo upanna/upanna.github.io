@@ -1,2 +1,2 @@
-# panna.github.io
-Welcome to panna
+# upanna.github.io
+Welcome to upanna
