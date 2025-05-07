@@ -13,11 +13,14 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e3f1dc;
+            background: linear-gradient(135deg, #e3f1dc 0%, #f9f7f1 100%);
             color: #333;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         a {
@@ -38,13 +41,13 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
 
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -52,11 +55,12 @@
         }
 
         .brand {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1.6rem;
+            font-weight: 900;
             color: #ffe066;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             user-select: none;
+            font-family: 'Georgia', serif;
         }
 
         nav {
@@ -67,13 +71,16 @@
         ul.nav-links {
             list-style: none;
             display: flex;
-            gap: 30px;
+            gap: 32px;
         }
 
         ul.nav-links li a {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1rem;
-            padding: 8px 0;
+            padding: 8px 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            user-select: none;
         }
 
         /* Hamburger menu button */
@@ -81,9 +88,11 @@
             display: none;
             flex-direction: column;
             cursor: pointer;
-            width: 25px;
-            height: 20px;
+            width: 28px;
+            height: 22px;
             justify-content: space-between;
+            background: transparent;
+            border: none;
         }
 
         .hamburger span {
@@ -91,6 +100,7 @@
             background-color: #fff;
             border-radius: 3px;
             transition: all 0.3s ease;
+            display: block;
         }
 
         /* Mobile navigation */
@@ -101,14 +111,18 @@
                 right: 0;
                 height: calc(100% - 60px);
                 background-color: #a20300;
-                width: 200px;
+                width: 230px;
                 flex-direction: column;
-                align-items: start;
-                padding: 20px;
-                gap: 20px;
+                align-items: flex-start;
+                padding: 30px 25px;
+                gap: 25px;
                 transform: translateX(100%);
                 transition: transform 0.3s ease;
-                box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+                box-shadow: -3px 0 15px rgba(0,0,0,0.4);
+                overflow-y: auto;
+                z-index: 10001;
+                font-size: 1.1rem;
+                font-weight: 700;
             }
             ul.nav-links.show {
                 transform: translateX(0);
@@ -121,122 +135,153 @@
 
         /* Hamburger animations when active */
         .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
+            transform: rotate(45deg) translate(6px, 6px);
         }
         .hamburger.active span:nth-child(2) {
             opacity: 0;
         }
         .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
+            transform: rotate(-45deg) translate(6px, -6px);
         }
 
         /* Main content container */
         main {
             max-width: 1100px;
-            margin: 30px auto 50px;
-            padding: 0 20px;
+            margin: 36px auto 60px;
+            padding: 0 24px;
+            flex-grow: 1;
         }
 
         /* Page title */
         h1.page-title {
-            font-size: 1.8rem;
+            font-size: 2.4rem;
             color: #9b0a00;
             text-align: center;
             margin-bottom: 40px;
-            font-weight: 700;
-            line-height: 1.2;
+            font-weight: 900;
+            line-height: 1.15;
             user-select: none;
+            text-shadow: 1px 1px 2px #ffc;
+            font-family: 'Georgia', serif;
         }
 
         /* Gallery grid */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-            gap: 20px;
-            margin-bottom: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
         }
 
         .gallery-item {
             background-color: #fcf49c;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+                        box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: default;
         }
 
         .gallery-item:hover,
         .gallery-item:focus-within {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            outline: none;
         }
 
         .gallery-item img {
             width: 100%;
-            height: auto;
+            height: 180px;
             object-fit: cover;
-            border-bottom: 3px solid #9b0a00;
+            border-bottom: 4px solid #9b0a00;
+            user-select: none;
         }
 
         .gallery-item h2 {
             color: #9b0a00;
-            font-size: 1.1rem;
-            margin: 15px 10px 20px 10px;
-            font-weight: 600;
+            font-size: 1.15rem;
+            margin: 16px 12px 24px 12px;
+            font-weight: 700;
             text-align: center;
             user-select: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         /* Bio subtitle */
         .subtitle {
             text-align: center;
             font-weight: 700;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: #9b0a00;
-            margin: 0 0 20px;
+            margin: 0 0 24px;
+            font-family: 'Georgia', serif;
+            user-select: none;
         }
 
         /* Bio text */
         .bio-text {
             background-color: #fcf49c;
-            padding: 20px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-size: 1rem;
+            padding: 28px 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            font-size: 1.05rem;
             color: #333;
             text-align: justify;
-            max-width: 900px;
-            margin: 0 auto;
+            max-width: 920px;
+            margin: 0 auto 48px;
             white-space: pre-line;
             user-select: text;
+            line-height: 1.65;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            color: #777;
+            padding: 20px 16px;
+            font-size: 1rem;
+            color: #555;
             border-top: 1px solid #ddd;
             user-select: none;
+            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 0.05em;
         }
 
         /* Scrollbar styling for menu on mobile */
         @media (max-width: 768px) {
-            ul.nav-links {
-                overflow-y: auto;
-            }
             ul.nav-links::-webkit-scrollbar {
-                width: 6px;
+                width: 7px;
             }
             ul.nav-links::-webkit-scrollbar-track {
-                background: #9a0000;
+                background: #930000;
             }
             ul.nav-links::-webkit-scrollbar-thumb {
                 background-color: #ffdb57;
-                border-radius: 3px;
+                border-radius: 4px;
+            }
+        }
+
+        /* Responsive typography */
+        @media (max-width: 480px) {
+            h1.page-title {
+                font-size: 1.75rem;
+                margin-bottom: 32px;
+            }
+            ul.nav-links {
+                gap: 18px;
+                font-size: 1rem;
+            }
+            .gallery-item img {
+                height: 140px;
+            }
+            .bio-text {
+                font-size: 0.95rem;
+                padding: 20px 20px;
             }
         }
     </style>
@@ -262,7 +307,7 @@
     </header>
 
     <main id="home" tabindex="-1">
-    <h1 class="page-title">အရှင်ပညာသိရီ၏ ဘဝပုံရိပ် မှတ်တမ်းနှင့် ထေရုပ္ပတ္တိအကျဉ်း</h1>
+        <h1 class="page-title">အရှင်ပညာသိရီ၏ ဘဝပုံရိပ် မှတ်တမ်းနှင့် ထေရုပ္ပတ္တိအကျဉ်း</h1>
 
         <section id="gallery" aria-label="Photo gallery" class="gallery">
             <article class="gallery-item" tabindex="0">
@@ -279,9 +324,10 @@
             </article>
         </section>
 
-     <section id="about" aria-labelledby="about-title">       
-            <article class="bio-text" tabindex="0"><h1 class="page-title">ထေရုပ္ပတ္တိအကျဉ်း</h1>
-                _____အရှင်ပညာသိရီသည် ပဲခူးတိုင်းဒေသကြီး၊ ညောင်လေးပင်မြို့နယ်၊ မြို့မ (၅ )ရပ်ကွက်နေ ခမည်းတော် (ဦးမောင်မြင့်) + မယ်တော် ဒေါ်ခင်ရဲလွင်တို့မှ ၁၃၄၆ ခုနှစ်၊ ဝါခေါင်လဆုတ် ၁၂ ရက်၊ ကြာသပတေးနေ့ နံနက် ၆ နာရီတွင် ဖွားမြင်သည်।
+        <section id="about" aria-labelledby="about-title">       
+            <article class="bio-text" tabindex="0">
+                <h1 class="page-title">ထေရုပ္ပတ္တိအကျဉ်း</h1>
+                _____အရှင်ပညာသိရီသည် ပဲခူးတိုင်းဒေသကြီး၊ ညောင်လေးပင်မြို့နယ်၊ မြို့မ (၅ )ရပ်ကွက်နေ ခမည်းတော် (ဦးမောင်မြင့်) + မယ်တော် ဒေါ်ခင်ရဲလွင်တို့မှ ၁၃၄၆ ခုနှစ်၊ ဝါခေါင်လဆုတ် ၁၂ ရက်၊ ကြာသပတေးနေ့ နံနက် ၆ နာရီတွင် ဖွားမြင်သည်။
                 မွေးချင်း ၆ ယောက်အနက် အငယ်ဆုံး သားရတနာဖြစ်ပြီး ငယ်အမည်မှာ ဘိုဘို ခေါ် ဘိုမြင့်လွင် ဖြစ်သည်။
                 ကိုးနှစ်သားအရွယ်တွင် ပဲခူးတိုင်းဒေသကြီး၊ ညောင်လေးပင်မြို့နယ်၊ ကုသိနာရုံပါဠိသိပ္ပံဆရာတော် ဘဒ္ဒန္တတေဇိန္ဒမဟာထေရ်မြတ်ကို ဉပေဇ္ဈာယ်ပြု မယ်တော် ဒေါ်ခင်ရဲလွင်၏ ပစ္စယာနုဂ္ဂဟကို ခံယူကာ ရှင်သာမဏေအဖြစ်သို့ ရောက်ရှိသည်။
                 <br />
@@ -295,38 +341,39 @@
                 <br />
                 ၂၀၁၈ - ၂၀၁၉ ပညာသင်နှစ်တွင် စစ်ကိုင်းမြို့၊ သီတဂူကမ္ဘာ့ဗုဒ္ဓတက္ကသိုလ်တွင် အတွင်းနေအဖြစ် သီတင်းသုံး စာဝါလိုက်လျက် ၂၀၁၉ ခုနှစ်တွင် “ဗုဒ္ဓဒေသနာ မဟာဝိဇ္ဇာ(M.A)ဘွဲ့ကို ပထမဂုဏ်ထူးဖြင့် အောင်မြင်တော်မူခဲ့သည်။
                 ၂၀၂၂ ခုနှစ်တွင် ပဲခူးမြို့၊ ဓမ္မဒူတဗုဒ္ဓတက္ကသိုလ်တွင် Master of Philosophy(M.Phil.) ကို အောင်မြင်တော်မူပြီးနောက်
-                ယခုအခါ ၎င်းဓမ္မဒူတဗုဒ္ဓတက္ကသိုလ်တွင် Ph.D(ပါရဂူ) ဘွဲ့အတွက် ကျမ်းပြုစာတမ်းရေးသားလျက်ရှိပါသည်။           
-        
- <h1 class="page-title">အောင်လက်မှတ်နှင့် ဘွဲ့တံဆိပ်များ</h1>
-
-        <section id="gallery" aria-label="Photo gallery" class="gallery">
-            <article class="gallery-item" tabindex="0">
-                <img src="dip.jpg" alt="Diploama အောင်လက်မှတ်" />
-            </article>
-            <article class="gallery-item" tabindex="0">
-                <img src="ma.jpg" alt="M.A ဘွဲ့လက်မှတ်" />               
-            </article>
-            <article class="gallery-item" tabindex="0">
-                <img src="ba.jpg" alt="B.Aဘွဲ့လက်မှတ်" />
-            </article>
-            <article class="gallery-item" tabindex="0">
-                <img src="dhammacariya.jpg" alt="ဓမ္မာစရိယဘွဲ့လက်မှတ်" />
-            </article>
-<article class="gallery-item" tabindex="0">
-                <img src="leti.jpg" alt="လယ်တီကမ္မဋ္ဌာနာစရိယအောင်လက်မှတ်" />               
+                ယခုအခါ ၎င်းဓမ္မဒူတဗုဒ္ဓတက္ကသိုလ်တွင် Ph.D(ပါရဂူ) ဘွဲ့အတွက် ကျမ်းပြုစာတမ်းရေးသားလျက်ရှိပါသည်။
             </article>
 
-            <article class="gallery-item" tabindex="0">
-                <img src="eng.jpg" alt="အင်္ဂလိပ်စာအောင်လက်မှတ်" />
-            <article class="gallery-item" tabindex="0">
-                <img src="usa.jpg" alt="စာပေအောင်လက်မှတ်" />               
-            </article>
-            <article class="gallery-item" tabindex="0">
-                <img src="e1.jpg" alt="အင်္ဂလိပ်လက်မှတ်" />
+            <h1 class="page-title" style="margin-top: 40px;">အောင်လက်မှတ်နှင့် ဘွဲ့တံဆိပ်များ</h1>
 
-                 
-            </article>
-        </section>
+            <section aria-label="Certificates gallery" class="gallery" style="margin-bottom:20px;">
+                <article class="gallery-item" tabindex="0">
+                    <img src="dip.jpg" alt="Diploama အောင်လက်မှတ်" />
+                </article>
+                <article class="gallery-item" tabindex="0">
+                    <img src="ma.jpg" alt="M.A ဘွဲ့လက်မှတ်" />               
+                </article>
+                <article class="gallery-item" tabindex="0">
+                    <img src="ba.jpg" alt="B.Aဘွဲ့လက်မှတ်" />
+                </article>
+                <article class="gallery-item" tabindex="0">
+                    <img src="dhammacariya.jpg" alt="ဓမ္မာစရိယဘွဲ့လက်မှတ်" />
+                </article>
+                <article class="gallery-item" tabindex="0">
+                    <img src="leti.jpg" alt="လယ်တီကမ္မဋ္ဌာနာစရိယအောင်လက်မှတ်" />               
+                </article>
+                <article class="gallery-item" tabindex="0">
+                    <img src="eng.jpg" alt="အင်္ဂလိပ်စာအောင်လက်မှတ်" />
+                </article>
+                <article class="gallery-item" tabindex="0">
+                    <img src="usa.jpg" alt="စာပေအောင်လက်မှတ်" />               
+                </article>
+                <article class="gallery-item" tabindex="0">
+                    <img src="e1.jpg" alt="အင်္ဂလိပ်လက်မှတ်" />
+                </article>
+            </section>
+
+            <article class="bio-text" tabindex="0" style="max-width: 920px; margin-top: -20px; padding-top: 0; box-shadow:none; background: none;">
                 ၂၀.၆.၂၀၀၄ ခုနှစ်တွင် "M.S.L.(USA)" အောင်လက်မှတ်ကိုလည်းကောင်း၊<br/>
                 ၈.၅.၂၀၀၉ ခုနှစ်တွင် "ကမ္မဋ္ဌာနာစရိယ(လယ်တီ)" လက်မှတ်ကိုလည်းကောင်း၊<br/>
                 ၁၂.၁၀.၂၀၀၉ ခုနှစ်တွင် "RWCT(Edu)" လက်မှတ်ကိုလည်းကောင်း၊<br/>
@@ -336,17 +383,14 @@
                 ၂၀.၆.၂၀၁၁ ခုနှစ်တွင် "သာသနဓဇဓမ္မာစရိယ" အောင်လက်မှတ်ကိုလည်းကောင်း၊<br/>
                 ၂၆.၆.၂၀၁၉ ခုနှစ်တွင် "M.A.(မဟာဝိဇ္ဇာ)" ဘွဲ့အောင်လက်မှတ်ကိုလည်းကောင်း၊<br/>
                 ၂၈.၂.၂၀၂၄ ခုနှစ်တွင် "M.Phil(Master of Philosophy)" ကိုလည်းကောင်း အသီးသီး အောင်မြင်တော်မူခဲ့ပါသည်။
-                
             </article>
         </section>
 
-        <section id="contact" aria-labelledby="contact-title" style="margin-top:60px;">
+        <section id="contact" aria-labelledby="contact-title" style="margin-top:60px; max-width: 600px; margin-left: auto; margin-right: auto; padding: 0 20px;">
             <p class="subtitle" id="contact-title">Contact</p>
-            <div style="max-width: 600px; margin: 0 auto; padding: 0 15px;">
-                <p><strong>တယ်လီဖုန်း:</strong> 09948011000</p>
-                <p><strong>အီးမေးလ်:</strong> pannasiri@upanna.com</p>
-                <p><strong>လိပ်စာ:</strong> ပဲခူးတိုင်းဒေသကြီး၊ မြို့မ (၅) ရပ်ကွက်၊ မြန်မာပြည်</p>
-            </div>
+            <p><strong>တယ်လီဖုန်း:</strong> 09948011000</p>
+            <p><strong>အီးမေးလ်:</strong> pannasiri@upanna.com</p>
+            <p><strong>လိပ်စာ:</strong> ပဲခူးတိုင်းဒေသကြီး၊ မြို့မ (၅) ရပ်ကွက်၊ မြန်မာပြည်</p>
         </section>
     </main>
 
