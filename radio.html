@@ -228,11 +228,20 @@
   <header>
     <h1>မြန်မာ့ ရေဒီယို</h1>
     <p>AutoDJ Streaming Radio</p>
-    <div id="controls">   
-      <button id="playBtn" class="control-btn" title="ဖွင့်/ရပ်">▶</button>  
-    </div>
     <div id="time-display">00:00 / 00:00</div>
   </header>
+  
+  <div id="player-container">
+    <ul id="playlist"></ul>
+    <div id="progress-container">
+      <div id="progress"></div>
+    </div>
+    <div id="controls">   
+      <button id="prevBtn" class="control-btn" title="အရင်">◀</button>
+      <button id="playBtn" class="control-btn" title="ဖွင့်/ရပ်">▶</button>  
+      <button id="nextBtn" class="control-btn" title="နောက်">▶</button>
+    </div>
+  </div>
   
   <div id="schedule">
     <h2>အစီအစဉ် အချိန်ဇယား</h2>
@@ -251,20 +260,22 @@
     // Myanmar songs playlist with direct MP3 links
     const playlist = [
       {
-        title: "မြန်မာသီချင်း ၂",
-        artist: "အနုပညာရှင်",
-        src: "http://www.upanna.com/dbu1.mp3"
+        src: "http://www.upanna.com/dbu1.mp3",
+       title: "ဓမ္မဒူတ", artist: "English"
       },
-       {
-        title: "မြန်မာသီချင်း ၂",
-        artist: "အနုပညာရှင်",
-        src: "http://www.upanna.com/song2.mp3"
+{
+        src: "http://www.upanna.com/song2.mp3",
+         title: "Myanmar Song", artist: "Myanmar"
       },
       {
-        title: "မြန်မာသီချင်း ၃",
-        artist: "အနုပညာရှင်",
-        src: "http://www.upanna.com/song4.mp3"
+        src: "http://www.upanna.com/song4.mp3",
+         title: "Myanmar", artist: "Myanmar"
       },
+      {
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        title: "နမူနာသီချင်း",
+        artist: "SoundHelix"
+      }
     ];
 
     const audio = new Audio();
@@ -290,6 +301,8 @@
       
       // Set up event listeners
       document.getElementById('playBtn').addEventListener('click', togglePlay);
+      document.getElementById('prevBtn').addEventListener('click', prevTrack);
+      document.getElementById('nextBtn').addEventListener('click', nextTrack);
       document.getElementById('progress-container').addEventListener('click', seekTrack);
       
       audio.addEventListener('timeupdate', updateProgress);
@@ -338,6 +351,12 @@
       }
       isPlaying = !isPlaying;
       updatePlayButton();
+    }
+    
+    // Previous track
+    function prevTrack() {
+      const newIndex = (currentTrack - 1 + playlist.length) % playlist.length;
+      playTrack(newIndex);
     }
     
     // Next track
