@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>FM Radio autoDJ Playlist with Video</title>
+<title>မြန်မာသီချင်းများ - AutoDJ Radio</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Moulpali&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-  /* Reset & base */
   * {
     box-sizing: border-box;
   }
+  
   body {
     margin: 0;
     font-family: 'Moulpali', 'Montserrat', sans-serif;
@@ -21,544 +21,376 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 1rem;
   }
 
   header {
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     width: 100%;
     max-width: 350px;
     background: rgba(0, 0, 0, 0.5);
     border-bottom: 3px solid #ff3377;
     text-align: center;
-    user-select: none;
+    margin-bottom: 1rem;
   }
+  
   header h1 {
     margin: 0;
-    font-weight: 700;
-    font-size: 1.6rem;
-    letter-spacing: 2px;
     color: #ff66aa;
+    font-size: 1.5rem;
   }
+  
   header p {
-    margin: 0.3rem 0 0 0;
-    font-weight: 400;
-    font-size: 0.95rem;
+    margin: 0.5rem 0 0;
     color: #ffa0c9;
+    font-size: 0.9rem;
   }
 
-  main {
-    flex-grow: 1;
+  #player-container {
     width: 100%;
     max-width: 350px;
-    padding: 1rem 1rem 1.5rem;
-    display: flex;
-    flex-direction: column;
     background: rgba(0,0,0,0.35);
     border-radius: 12px;
-    margin-top: 1rem;
-  }
-  
-  /* Video container */
-  #video-container {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: #000;
-    border-radius: 8px;
-    overflow: hidden;
+    padding: 1rem;
     margin-bottom: 1rem;
-    display: none; /* Hidden by default */
-    position: relative;
-  }
-  #video-player {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #000;
-  }
-  
-  /* Headings */
-  main h2 {
-    color: #ff66aa;
-    margin-bottom: 0.8rem;
-    font-weight: 700;
-    user-select: none;
-    border-left: 4px solid #ff3377;
-    padding-left: 0.6rem;
   }
 
-  /* Playlist */
   #playlist {
     list-style: none;
     padding: 0;
     margin: 0 0 1rem 0;
-    max-height: 260px;
+    max-height: 300px;
     overflow-y: auto;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255,255,255,0.2);
     border-radius: 8px;
     background: #222a44;
-    -webkit-overflow-scrolling: touch;
   }
+  
   #playlist li {
-    padding: 0.7rem 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
     cursor: pointer;
-    color: #ddd;
-    display: grid;
-    grid-template-columns: 30px 1fr 30px;
-    gap: 0.5rem;
+    display: flex;
     align-items: center;
-    transition: background 0.3s ease, color 0.3s ease;
-    font-size: 0.92rem;
+    transition: background 0.2s;
   }
-  #playlist li:last-child {
-    border-bottom: none;
-  }
+  
   #playlist li:hover {
-    background: #ff3377;
-    color: white;
+    background: rgba(255,51,119,0.3);
   }
+  
   #playlist li.playing {
     background: #ff66aa;
     color: #000;
-    font-weight: 700;
+    font-weight: bold;
   }
+  
   #playlist li .track-number {
-    font-weight: 700;
+    width: 25px;
     text-align: center;
+    margin-right: 10px;
+    font-weight: bold;
   }
+  
+  #playlist li .track-info {
+    flex: 1;
+  }
+  
   #playlist li .track-title {
-    overflow: hidden;
+    font-size: 0.95rem;
     white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
   }
-  #playlist li .track-type {
-    font-size: 0.7rem;
-    background: rgba(255,255,255,0.2);
-    padding: 2px 5px;
-    border-radius: 4px;
-    text-align: center;
+  
+  #playlist li .track-artist {
+    font-size: 0.8rem;
+    color: #ffb0d4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  /* Player controls */
-  #player-controls {
+  #controls {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 1.2rem;
-    margin-bottom: 1rem;
+    gap: 1.5rem;
+    margin: 1rem 0;
   }
+  
   button.control-btn {
     background: #ff3377;
     border: none;
     border-radius: 50%;
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     color: white;
     font-size: 20px;
-    font-weight: 700;
-    line-height: 1;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(255,51,119,0.55);
-    transition: background 0.25s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    box-shadow: 0 4px 10px rgba(255,51,119,0.5);
+    transition: all 0.2s;
   }
+  
   button.control-btn:active {
-    background: #d1225b;
-  }
-  button.control-btn[disabled] {
-    background: #666;
-    cursor: not-allowed;
-    box-shadow: none;
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(255,51,119,0.5);
   }
 
-  /* Progress bar */
   #progress-container {
-    position: relative;
     width: 100%;
-    height: 18px;
-    background: #444c78;
-    border-radius: 12px;
-    overflow: hidden;
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    margin: 1rem 0;
     cursor: pointer;
   }
+  
   #progress {
-    background: #ff66aa;
     height: 100%;
+    background: #ff66aa;
     width: 0%;
-    transition: width 0.1s linear;
+    border-radius: 3px;
+    transition: width 0.1s;
   }
-  #time {
-    margin-top: 6px;
+  
+  #time-display {
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: #ffa0c9;
-    font-variant-numeric: tabular-nums;
-    user-select: none;
+    margin-bottom: 1rem;
   }
 
-  /* Footer */
+  #schedule {
+    width: 100%;
+    max-width: 350px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  #schedule h2 {
+    color: #ff66aa;
+    margin-top: 0;
+    border-left: 4px solid #ff3377;
+    padding-left: 0.5rem;
+  }
+  
+  #schedule p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  #schedule strong {
+    color: #ffa0c9;
+  }
+
   footer {
-    margin-top: 1rem;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #ffa0c9;
     text-align: center;
-    user-select: none;
+    padding: 1rem;
   }
 
-  /* Scrollbar styling for playlist */
+  /* Scrollbar styling */
   #playlist::-webkit-scrollbar {
     width: 6px;
   }
+  
   #playlist::-webkit-scrollbar-track {
     background: #1c2640;
   }
+  
   #playlist::-webkit-scrollbar-thumb {
     background: #ff3380;
     border-radius: 3px;
   }
 
-  /* Responsive text sizes */
   @media (max-width: 400px) {
     header h1 {
       font-size: 1.3rem;
     }
+    
     #playlist li {
-      padding: 0.6rem 0.8rem;
-      font-size: 0.88rem;
-      grid-template-columns: 28px 1fr 28px;
+      padding: 0.7rem;
     }
+    
     button.control-btn {
-      width: 36px;
-      height: 36px;
+      width: 45px;
+      height: 45px;
       font-size: 18px;
     }
-    #time {
-      font-size: 0.75rem;
-    }
   }
-
 </style>
 </head>
 <body>
   <header>
     <h1>မြန်မာ့ ရေဒီယို</h1>
-    <p>Created by U Pannasiri(DBU)</p>
+    <p>AutoDJ Streaming Radio</p>
+    <div id="controls">   
+      <button id="playBtn" class="control-btn" title="ဖွင့်/ရပ်">▶</button>  
+    </div>
+    <div id="time-display">00:00 / 00:00</div>
   </header>
-  <main>
-    <div id="video-container">
-      <video id="video-player" playsinline></video>
-    </div>
-    
-    <h2>Today's Playlist</h2>
-    <ul id="playlist" aria-label="ယနေ့၏ သီချင်းစာရင်း"></ul>
-    <div id="player-controls">
-      <button id="prevBtn" class="control-btn" aria-label="အရင် သီချင်း">&#9664;&#9664;</button>
-      <button id="playPauseBtn" class="control-btn" aria-label="ဖွင့်ရန် သို့မဟုတ် ရပ်တန့်ရန်">&#9658;</button>
-      <button id="nextBtn" class="control-btn" aria-label="နောက် သီချင်း">&#9654;&#9654;</button>
-    </div>
-    <div id="progress-container" aria-label="တေးမြေပုံတိုးချဲ့ပမာဏ" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-      <div id="progress"></div>
-    </div>
-    <div id="time" aria-live="polite" aria-atomic="true">00:00 / 00:00</div>
-
-    <h2>အစီအစဉ် အချိန်ဇယား (Program Schedule)</h2>
-    <section id="program-schedule" style="color:#f0c4d9; font-size: 0.9rem; line-height:1.3; user-select:none;">
-      <p><strong>နံနက် ၅း၀၀ - ၁၂း၀၀</strong> - တရားတော်များ၊ နေ့စဉ်သီချင်းများနှင့် ဗဟုသုတရေးရာအဖြာဖြာ</p>
-      <p><strong>မွန်းလွဲ ၁၂း၀၀ - ၂း၀၀</strong> - မြန်မာသီချင်းများနှင့် တွေ့ဆုံပွဲများ</p>
-      <p><strong>နေ့လည် ၂း၀၀ - ၄း၀၀</strong> - အမေးအဖြေများနှင့် အင်္ဂလိပ်သီချင်းများ</p>
-      <p><strong>ညနေ ၄း၀၀ - ၆း၀၀</strong> - မြန်မာသံစဉ်များနှင့် အသိပညာအတတ်ပညာများဆွေးနွေး ပြောကြားခြင်း</p>
-      <p><strong>ည ၆း၀၀ - ၁၁း၀၀</strong> - အိပ်ယာဝင်တေးသံစဉ် ဂီတ နှင့် အလွမ်းတေးများ</p>
-    </section>
-  </main>
-  <footer>© 2024 FM AutoDJ Streaming Radio</footer>
+  
+  <div id="schedule">
+    <h2>အစီအစဉ် အချိန်ဇယား</h2>
+    <p><strong>နံနက် ၅း၀၀ - ၁၂း၀၀</strong> - တရားတော်များ၊ နေ့စဉ်သီချင်းများနှင့် ဗဟုသုတရေးရာအဖြာဖြာ</p>
+    <p><strong>မွန်းလွဲ ၁၂း၀၀ - ၂း၀၀</strong> - မြန်မာသီချင်းများနှင့် တွေ့ဆုံပွဲများ</p>
+    <p><strong>နေ့လည် ၂း၀၀ - ၄း၀၀</strong> - အမေးအဖြေများနှင့် အင်္ဂလိပ်သီချင်းများ</p>
+    <p><strong>ညနေ ၄း၀၀ - ၆း၀၀</strong> - မြန်မာသံစဉ်များနှင့် အသိပညာအတတ်ပညာများဆွေးနွေး ပြောကြားခြင်း</p>
+    <p><strong>ည ၆း၀၀ - ၁၁း၀၀</strong> - အိပ်ယာဝင်တေးသံစဉ် ဂီတ နှင့် အလွမ်းတေးများ</p>
+  </div>
+  
+  <footer>
+    © 2024 Myanmar Radio Station | Created by U Pannasiri (DBU)
+  </footer>
 
   <script>
-    (function(){
-      // AutoDJ Playlist - Supports both MP3 and MP4
-      const playlist = [
-        {
-          title: "ဓမ္မဒူတ",
-          artist: "အင်္ဂလိပ်အဆိုတော်",
-          src: "http://www.upanna.com/dbu1.mp3",
-          type: "audio"
-        },
-        {
-          title: "မြန်မာသံစဉ်သီချင်းများ",
-          artist: "တေးဆို - မနောနှင့် အဆိုတော်များ",
-          src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-          type: "audio"
-        },
-        {
-          title: "မြန်မာရုပ်ရှင်သီချင်း (MP4)",
-          artist: "အဆိုတော် - အောင်ထွန်းဦး",
-          src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-          type: "video"
-        },
-        {
-          title: "မြေဖြူလည်းတို ဆရာလည်းအို",
-          artist: "တေးဆို - မျိုးကျော်ဦး",
-          src: "http://www.upanna.com/song4.mp3",
-          type: "audio"
-        }
-      ];
+    // Myanmar songs playlist with direct MP3 links
+    const playlist = [
+      {
+        title: "မြန်မာသီချင်း ၂",
+        artist: "အနုပညာရှင်",
+        src: "http://www.upanna.com/dbu1.mp3"
+      },
+      {
+        title: "မြန်မာသီချင်း ၃",
+        artist: "အနုပညာရှင်",
+        src: "http://www.upanna.com/song4.mp3"
+      },
+      {
+        title: "နမူနာသီချင်း",
+        artist: "SoundHelix",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      }
+    ];
 
+    const audio = new Audio();
+    let currentTrack = 0;
+    let isPlaying = false;
+    
+    // Initialize player
+    function initPlayer() {
+      // Build playlist
       const playlistEl = document.getElementById('playlist');
-      const playPauseBtn = document.getElementById('playPauseBtn');
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const progressContainer = document.getElementById('progress-container');
-      const progress = document.getElementById('progress');
-      const timeEl = document.getElementById('time');
-      const videoContainer = document.getElementById('video-container');
-      const videoPlayer = document.getElementById('video-player');
-
-      const audio = new Audio();
-      let currentIndex = 0;
-      let isPlaying = false;
-      let currentMediaType = 'audio';
-
-      // Build playlist UI with details
-      function buildPlaylist() {
-        playlist.forEach((track, i) => {
-          const li = document.createElement('li');
-          li.setAttribute('tabindex', '0');
-          li.dataset.index = i;
-          li.innerHTML =
-            '<span class="track-number">' + (i + 1) + '</span>' +
-            '<span class="track-title">' + track.title + '<br><small>' + track.artist + '</small></span>' +
-            '<span class="track-type">' + (track.type === 'video' ? '🎥' : '🎵') + '</span>';
-          li.addEventListener('click', () => {
-            loadTrack(i);
-            playMedia();
-          });
-          li.addEventListener('keydown', (e) => {
-            if(e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              loadTrack(i);
-              playMedia();
-            }
-          });
-          playlistEl.appendChild(li);
+      playlist.forEach((track, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span class="track-number">${index + 1}</span>
+          <div class="track-info">
+            <div class="track-title">${track.title}</div>
+            <div class="track-artist">${track.artist}</div>
+          </div>
+        `;
+        li.addEventListener('click', () => playTrack(index));
+        playlistEl.appendChild(li);
+      });
+      
+      // Set up event listeners
+      document.getElementById('playBtn').addEventListener('click', togglePlay);
+      document.getElementById('progress-container').addEventListener('click', seekTrack);
+      
+      audio.addEventListener('timeupdate', updateProgress);
+      audio.addEventListener('ended', nextTrack);
+      audio.addEventListener('error', handleError);
+      
+      // Load first track
+      loadTrack(0);
+    }
+    
+    // Load a track
+    function loadTrack(index) {
+      if (index < 0 || index >= playlist.length) return;
+      
+      currentTrack = index;
+      audio.src = playlist[index].src;
+      
+      // Update UI
+      updatePlaylistUI();
+      updatePlayButton();
+      document.getElementById('time-display').textContent = "00:00 / 00:00";
+      document.getElementById('progress').style.width = "0%";
+    }
+    
+    // Play the current track
+    function playTrack(index) {
+      loadTrack(index);
+      audio.play()
+        .then(() => {
+          isPlaying = true;
+          updatePlayButton();
+        })
+        .catch(err => {
+          alert("သီချင်းဖွင့်၍မရပါ: " + err.message);
+        });
+    }
+    
+    // Toggle play/pause
+    function togglePlay() {
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        audio.play().catch(err => {
+          alert("သီချင်းဖွင့်၍မရပါ: " + err.message);
         });
       }
-
-      function loadTrack(index) {
-        if(index < 0) index = playlist.length - 1;
-        else if(index >= playlist.length) index = 0;
-        
-        currentIndex = index;
-        const track = playlist[index];
-        currentMediaType = track.type;
-        
-        if(track.type === 'video') {
-          // Hide audio player, show video player
-          audio.pause();
-          isPlaying = false;
-          videoContainer.style.display = 'block';
-          videoPlayer.src = track.src;
-          videoPlayer.load();
-          // iOS requires this for inline playback
-          videoPlayer.setAttribute('playsinline', '');
-          videoPlayer.setAttribute('webkit-playsinline', '');
-        } else {
-          // Hide video player, use audio player
-          videoContainer.style.display = 'none';
-          videoPlayer.pause();
-          audio.src = track.src;
-          audio.load();
-        }
-        
-        updatePlaylistUI();
-        updatePlayPauseButton();
-        updateTime(0, 0);
-        progress.style.width = '0%';
-      }
-
-      function playMedia() {
-        if(currentMediaType === 'video') {
-          // Important: On mobile, this must be triggered by user gesture
-          const playPromise = videoPlayer.play();
-          
-          if (playPromise !== undefined) {
-            playPromise.then(() => {
-              isPlaying = true;
-              updatePlayPauseButton();
-              updatePlaylistUI();
-            })
-            .catch(error => {
-              console.error("Video playback failed:", error);
-              alert("ဗီဒီယိုဖွင့်ရန် မအောင်မြင်ပါ။ ကျေးဇူးပြု၍ နောက်တစ်ကြိမ်ကြိုးစားကြည့်ပါ။\nError: " + error.message);
-              // Fallback to showing controls if autoplay fails
-              videoPlayer.setAttribute('controls', '');
-            });
-          }
-        } else {
-          audio.play()
-            .then(() => {
-              isPlaying = true;
-              updatePlayPauseButton();
-              updatePlaylistUI();
-            })
-            .catch(error => {
-              console.error("Audio playback failed:", error);
-              alert("သီချင်းဖွင့်ရန် မအောင်မြင်ပါ။ ကျေးဇူးပြု၍ နောက်တစ်ကြိမ်ကြိုးစားကြည့်ပါ။");
-            });
-        }
-      }
-
-      function pauseMedia() {
-        if(currentMediaType === 'video') {
-          videoPlayer.pause();
-        } else {
-          audio.pause();
-        }
-        isPlaying = false;
-        updatePlayPauseButton();
-      }
-
-      function togglePlayPause() {
-        if(isPlaying) pauseMedia();
-        else playMedia();
-      }
-
-      function nextTrack() {
-        loadTrack(currentIndex + 1);
-        playMedia();
-      }
-
-      function prevTrack() {
-        loadTrack(currentIndex - 1);
-        playMedia();
-      }
-
-      function updatePlaylistUI() {
-        const lis = playlistEl.querySelectorAll('li');
-        lis.forEach(li => li.classList.remove('playing'));
-        const currentLi = playlistEl.querySelector('li[data-index="'+currentIndex+'"]');
-        if(currentLi) currentLi.classList.add('playing');
-      }
-
-      function updatePlayPauseButton() {
-        playPauseBtn.innerHTML = isPlaying ? '&#10074;&#10074;' : '&#9658;';
-      }
-
-      function formatTime(seconds) {
-        const m = Math.floor(seconds / 60);
-        const s = Math.floor(seconds % 60);
-        return (m < 10 ? '0'+m : m) + ':' + (s < 10 ? '0'+s : s);
-      }
-
-      function updateTime(current, duration) {
-        timeEl.textContent = formatTime(current) + ' / ' + formatTime(duration);
-      }
-
-      // Audio event listeners
-      audio.addEventListener('timeupdate', () => {
-        if(audio.duration) {
-          const percent = (audio.currentTime / audio.duration) * 100;
-          progress.style.width = percent + '%';
-          updateTime(audio.currentTime, audio.duration);
-          progressContainer.setAttribute('aria-valuenow', Math.floor(percent));
-        }
-      });
-
-      audio.addEventListener('ended', () => {
-        nextTrack();
-      });
-
-      // Video event listeners
-      videoPlayer.addEventListener('timeupdate', () => {
-        if(!isNaN(videoPlayer.duration) {
-          const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-          progress.style.width = percent + '%';
-          updateTime(videoPlayer.currentTime, videoPlayer.duration);
-          progressContainer.setAttribute('aria-valuenow', Math.floor(percent));
-        }
-      });
-
-      videoPlayer.addEventListener('ended', () => {
-        nextTrack();
-      });
-
-      // Control event listeners
-      playPauseBtn.addEventListener('click', togglePlayPause);
-      prevBtn.addEventListener('click', prevTrack);
-      nextBtn.addEventListener('click', nextTrack);
-
-      progressContainer.addEventListener('click', (e) => {
-        const rect = progressContainer.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const width = rect.width;
-        
-        if(currentMediaType === 'video' && !isNaN(videoPlayer.duration)) {
-          videoPlayer.currentTime = (clickX / width) * videoPlayer.duration;
-        } else if(!isNaN(audio.duration)) {
-          audio.currentTime = (clickX / width) * audio.duration;
-        }
-      });
-
-      progressContainer.addEventListener('keydown', (e) => {
-        let duration = currentMediaType === 'video' ? videoPlayer.duration : audio.duration;
-        if(!isNaN(duration)){
-          const step = duration * 0.05;
-          if(e.key === 'ArrowLeft'){
-            e.preventDefault();
-            if(currentMediaType === 'video') {
-              videoPlayer.currentTime = Math.max(0, videoPlayer.currentTime - step);
-            } else {
-              audio.currentTime = Math.max(0, audio.currentTime - step);
-            }
-          } else if(e.key === 'ArrowRight'){
-            e.preventDefault();
-            if(currentMediaType === 'video') {
-              videoPlayer.currentTime = Math.min(duration, videoPlayer.currentTime + step);
-            } else {
-              audio.currentTime = Math.min(duration, audio.currentTime + step);
-            }
-          }
-        }
-      });
-
-      // Error handling
-      audio.addEventListener('error', function() {
-        console.error("Audio error:", audio.error);
-        alert("သီချင်းဖွင့်ရာတွင် အမှားတစ်ခုဖြစ်ပေါ်နေပါသည်။");
-      });
-
-      videoPlayer.addEventListener('error', function() {
-        console.error("Video error:", videoPlayer.error);
-        let message = "ဗီဒီယိုဖွင့်ရာတွင် အမှားတစ်ခုဖြစ်ပေါ်နေပါသည်။";
-        switch(videoPlayer.error.code) {
-          case 1:
-            message += "\n(မှတ်ချက်: ဗီဒီယိုဖိုင်ကို ရှာမတွေ့ပါ)";
-            break;
-          case 2:
-            message += "\n(မှတ်ချက်: ဗီဒီယိုဖိုင်အမျိုးအစား မမှန်ပါ)";
-            break;
-          case 3:
-            message += "\n(မှတ်ချက်: ဗီဒီယိုကို ဒေါင်းလုဒ်ဆွဲရာတွင် အမှားဖြစ်နေပါသည်)";
-            break;
-          case 4:
-            message += "\n(မှတ်ချက်: ဗီဒီယိုကို ဖွင့်၍မရပါ)";
-            break;
-        }
-        alert(message);
-        // Fallback to showing controls if error occurs
-        videoPlayer.setAttribute('controls', '');
-      });
-
-      // Initialize
-      buildPlaylist();
-      loadTrack(0);
+      isPlaying = !isPlaying;
+      updatePlayButton();
+    }
+    
+    // Next track
+    function nextTrack() {
+      const newIndex = (currentTrack + 1) % playlist.length;
+      playTrack(newIndex);
+    }
+    
+    // Seek in track
+    function seekTrack(e) {
+      const percent = e.offsetX / e.target.offsetWidth;
+      audio.currentTime = percent * audio.duration;
+    }
+    
+    // Update progress bar
+    function updateProgress() {
+      const progress = (audio.currentTime / audio.duration) * 100;
+      document.getElementById('progress').style.width = `${progress}%`;
       
-      // Auto-play first track after user interaction
-      document.body.addEventListener('click', function initPlay() {
-        playMedia();
-        document.body.removeEventListener('click', initPlay);
-      }, { once: true });
-    })();
+      // Update time display
+      document.getElementById('time-display').textContent = 
+        `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+    }
+    
+    // Format time as MM:SS
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "00:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    // Update playlist UI
+    function updatePlaylistUI() {
+      const items = document.querySelectorAll('#playlist li');
+      items.forEach((item, index) => {
+        item.classList.toggle('playing', index === currentTrack);
+      });
+    }
+    
+    // Update play button
+    function updatePlayButton() {
+      document.getElementById('playBtn').textContent = isPlaying ? "❚❚" : "▶";
+    }
+    
+    // Handle errors
+    function handleError() {
+      alert("သီချင်းဖွင့်ရာတွင် အမှားတစ်ခုဖြစ်ပေါ်နေပါသည်။");
+      console.error("Audio error:", audio.error);
+    }
+    
+    // Initialize when page loads
+    window.addEventListener('DOMContentLoaded', initPlayer);
   </script>
 </body>
 </html>
