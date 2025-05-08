@@ -1,861 +1,418 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Myanmar FM Radio Station</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #6c5ce7;
-            --secondary: #a29bfe;
-            --dark: #2d3436;
-            --light: #f5f6fa;
-            --accent: #fd79a8;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .logo {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .logo i {
-            margin-right: 15px;
-        }
-        
-        .tagline {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-        }
-        
-        /* Player Section */
-        .player-section {
-            background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            margin: 2rem auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .player-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-        }
-        
-        .player-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .player {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .player-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .play-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3);
-        }
-        
-        .play-btn:hover {
-            background: var(--secondary);
-            transform: scale(1.05);
-        }
-        
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-        }
-        
-        .volume-control input[type="range"] {
-            flex: 1;
-            height: 6px;
-            border-radius: 3px;
-            background: #ddd;
-            outline: none;
-            -webkit-appearance: none;
-        }
-        
-        .volume-control input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            background: var(--primary);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        
-        .now-playing {
-            background: var(--light);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            border-left: 4px solid var(--primary);
-            animation: pulseBorder 3s infinite;
-        }
-        
-        @keyframes pulseBorder {
-            0% { border-left-color: var(--primary); }
-            50% { border-left-color: var(--accent); }
-            100% { border-left-color: var(--primary); }
-        }
-        
-        .song-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .song-art {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-        
-        .song-details {
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .song-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .song-artist {
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-        
-        /* Playlist */
-        .playlist {
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            border-radius: 8px;
-            border: 1px solid #eee;
-        }
-        
-        .playlist h3 {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            background: white;
-            padding: 15px;
-            z-index: 1;
-        }
-        
-        .playlist-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .playlist-item:hover {
-            background: rgba(108, 92, 231, 0.1);
-        }
-        
-        .playlist-item.active {
-            background: rgba(108, 92, 231, 0.2);
-            border-left: 3px solid var(--primary);
-        }
-        
-        .playlist-item .number {
-            width: 25px;
-            opacity: 0.7;
-            font-family: monospace;
-        }
-        
-        .playlist-item .play-icon {
-            width: 25px;
-            color: var(--primary);
-        }
-        
-        .playlist-item .song-details {
-            overflow: hidden;
-        }
-        
-        /* Programs */
-        .programs-section {
-            background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            margin: 2rem auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        
-        .section-title {
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-            position: relative;
-            padding-bottom: 10px;
-            font-size: 1.5rem;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background: var(--accent);
-        }
-        
-        .programs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .program-card {
-            background: var(--light);
-            border-radius: 8px;
-            padding: 20px;
-            transition: all 0.3s;
-            border-left: 4px solid transparent;
-        }
-        
-        .program-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left-color: var(--primary);
-        }
-        
-        .program-time {
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .program-time i {
-            font-size: 0.8em;
-        }
-        
-        .program-name {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-        }
-        
-        .program-dj {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            font-style: italic;
-        }
-        
-        /* Contact */
-        .contact-section {
-            background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            margin: 2rem auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .contact-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-        
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        
-        .form-group label {
-            font-weight: 500;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-        
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .submit-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            align-self: flex-start;
-        }
-        
-        .submit-btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-        
-        footer {
-            background: var(--dark);
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 1rem 0;
-        }
-        
-        .social-link {
-            color: white;
-            font-size: 1.5rem;
-            transition: all 0.3s;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .social-link:hover {
-            color: var(--accent);
-            transform: translateY(-3px);
-        }
-        
-        /* Loading animation */
-        .loading-animation {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            height: 20px;
-            align-items: flex-end;
-        }
-        
-        .loading-bar {
-            width: 4px;
-            background: var(--primary);
-            animation: loading 1.2s infinite ease-in-out;
-        }
-        
-        .loading-bar:nth-child(1) { animation-delay: 0s; height: 10px; }
-        .loading-bar:nth-child(2) { animation-delay: 0.2s; height: 15px; }
-        .loading-bar:nth-child(3) { animation-delay: 0.4s; height: 20px; }
-        .loading-bar:nth-child(4) { animation-delay: 0.6s; height: 15px; }
-        .loading-bar:nth-child(5) { animation-delay: 0.8s; height: 10px; }
-        
-        @keyframes loading {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(0.5); }
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2rem;
-            }
-            
-            .player-controls {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .volume-control {
-                width: 100%;
-            }
-            
-            .programs-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Floating notification */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--primary);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        .notification i {
-            font-size: 1.2rem;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>FM Radio autoDJ Playlist</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Moulpali&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Moulpali', 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    padding: 1rem 1.5rem;
+    width: 100%;
+    max-width: 350px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 3px solid #ff3377;
+    text-align: center;
+    user-select: none;
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: #ff66aa;
+  }
+  header p {
+    margin: 0.3rem 0 0 0;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: #ffa0c9;
+  }
+
+  main {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 350px;
+    padding: 1rem 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    background: rgba(0,0,0,0.35);
+    border-radius: 12px;
+    margin-top: 1rem;
+  }
+  /* Headings */
+  main h2 {
+    color: #ff66aa;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    user-select: none;
+    border-left: 4px solid #ff3377;
+    padding-left: 0.6rem;
+  }
+
+  /* Playlist */
+  #playlist {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+    max-height: 260px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: #222a44;
+    -webkit-overflow-scrolling: touch;
+  }
+  #playlist li {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    color: #ddd;
+    display: grid;
+    grid-template-columns: 30px 1fr 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    transition: background 0.3s ease, color 0.3s ease;
+    font-size: 0.92rem;
+  }
+  #playlist li:last-child {
+    border-bottom: none;
+  }
+  #playlist li:hover {
+    background: #ff3377;
+    color: white;
+  }
+  #playlist li.playing {
+    background: #ff66aa;
+    color: #000;
+    font-weight: 700;
+  }
+  #playlist li .track-number {
+    font-weight: 700;
+    text-align: center;
+  }
+  #playlist li .track-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  #playlist li .track-artist {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: #ffb0d4;
+  }
+
+  /* Player controls */
+  #player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  button.control-btn {
+    background: #ff3377;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255,51,119,0.55);
+    transition: background 0.25s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  button.control-btn:active {
+    background: #d1225b;
+  }
+  button.control-btn[disabled] {
+    background: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Progress bar */
+  #progress-container {
+    position: relative;
+    width: 100%;
+    height: 18px;
+    background: #444c78;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  #progress {
+    background: #ff66aa;
+    height: 100%;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+  #time {
+    margin-top: 6px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #ffa0c9;
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #ffa0c9;
+    text-align: center;
+    user-select: none;
+  }
+
+  /* Scrollbar styling for playlist */
+  #playlist::-webkit-scrollbar {
+    width: 6px;
+  }
+  #playlist::-webkit-scrollbar-track {
+    background: #1c2640;
+  }
+  #playlist::-webkit-scrollbar-thumb {
+    background: #ff3380;
+    border-radius: 3px;
+  }
+
+  /* Responsive text sizes */
+  @media (max-width: 400px) {
+    header h1 {
+      font-size: 1.3rem;
+    }
+    #playlist li {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.88rem;
+      grid-template-columns: 28px 1fr 1fr;
+    }
+    button.control-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+    }
+    #time {
+      font-size: 0.75rem;
+    }
+  }
+
+</style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <i class="fas fa-broadcast-tower"></i>
-                <span>Myanmar FM Radio Station</span>
-            </div>
-            <p class="tagline">The best music and programs 24/7</p>
-        </div>
-
-    </header>
-
-    <div class="container">
-        <!-- Player Section -->
-        <section class="player-section">
-            <div class="player-container">
-                <h2 class="section-title">Live Stream</h2>
-                <div class="player">
-                    <audio id="radio-stream" controls>
-                        <source src="https://stream.zeno.fm/nv7i41tz04mtv" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                    <div class="player-controls">
-                        <button id="play-btn" class="play-btn">
-                            <i class="fas fa-pause"></i>
-                        </button>
-                        <div class="volume-control">
-                            <i class="fas fa-volume-up"></i>
-                            <input type="range" id="volume" min="0" max="1" step="0.1" value="0.7">
-                        </div>
-                    </div>
-                    <div class="now-playing">
-                        <div class="song-info">
-                            <div class="song-art">
-                                <i class="fas fa-music"></i>
-                            </div>
-                            <div class="song-details">
-                                <div class="song-title" id="current-song">Loading...</div>
-                                <div class="song-artist" id="current-artist">Myanmar FM Radio</div>
-                                <div class="loading-animation" id="loading-indicator">
-                                    <div class="loading-bar"></div>
-                                    <div class="loading-bar"></div>
-                                    <div class="loading-bar"></div>
-                                    <div class="loading-bar"></div>
-                                    <div class="loading-bar"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="playlist">
-                    <h3>Today's Playlist</h3>
-                    <div id="playlist-items">
-                        <!-- Playlist items will be added by JavaScript -->
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Programs Section -->
-        <section class="programs-section">
-            <h2 class="section-title">Program Schedule</h2>
-            <div class="programs-grid">
-                <div class="program-card">
-                    <div class="program-time"><i class="far fa-clock"></i> 08:00 - 10:00</div>
-                    <div class="program-name">Morning Vibes</div>
-                    <div class="program-dj">With DJ Alex</div>
-                </div>
-                <div class="program-card">
-                    <div class="program-time"><i class="far fa-clock"></i> 12:00 - 14:00</div>
-                    <div class="program-name">Lunchtime Mix</div>
-                    <div class="program-dj">With Sarah</div>
-                </div>
-                <div class="program-card">
-                    <div class="program-time"><i class="far fa-clock"></i> 16:00 - 18:00</div>
-                    <div class="program-name">Evening Drive</div>
-                    <div class="program-dj">With Mike</div>
-                </div>
-                <div class="program-card">
-                    <div class="program-time"><i class="far fa-clock"></i> 20:00 - 22:00</div>
-                    <div class="program-name">Night Beats</div>
-                    <div class="program-dj">With DJ K</div>
-                </div>
-                <div class="program-card">
-                    <div class="program-time"><i class="far fa-clock"></i> 22:00 - 00:00</div>
-                    <div class="program-name">Late Night Lounge</div>
-                    <div class="program-dj">With Emma</div>
-                </div>
-                <div class="program-card">
-                    <div class="program-time"><i class="far fa-clock"></i> 00:00 - 08:00</div>
-                    <div class="program-name">AutoDJ Mix</div>
-                    <div class="program-dj">Non-stop Music</div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Contact Section -->
-        <section class="contact-section">
-            <h2 class="section-title">Contact Us</h2>
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div>
-                            <h4>Location</h4>
-                            <p>Indakaw Township, Bago, Myanmar</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div>
-                            <h4>Phone</h4>
-                            <p>+95 99 480 11000</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div>
-                            <h4>Email</h4>
-                            <p>contact@www.pmyanmar.com</p>
-                        </div>
-                    </div>
-<p>This Myanmar FM Radio is created by Ashin Pannasiri(Programming),<br/> 
-Dhammaduta Buddhist University, Bago, Myanmar</p> 
-                </div>
-                
-                <form class="contact-form">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" required></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Send Message</button>
-                </form>
-            </div>
-        </section>
+  <header>
+    <h1>FM AutoDJ ရေဒီယို</h1>
+    <p>Auto DJ MP3 Playlist</p>
+  </header>
+  <main>
+    <h2>Playlist (Today's Playlist)</h2>
+    <ul id="playlist" aria-label="ယနေ့၏ သီချင်းစာရင်း"></ul>
+    <div id="player-controls">
+      <button id="prevBtn" class="control-btn" aria-label="အရင် သီချင်း">&#9664;&#9664;</button>
+      <button id="playPauseBtn" class="control-btn" aria-label="ဖွင့်ရန် သို့မဟုတ် ရပ်တန့်ရန်">&#9658;</button>
+      <button id="nextBtn" class="control-btn" aria-label="နောက် သီချင်း">&#9654;&#9654;</button>
     </div>
-    
-    <footer>
-        <div class="container">
-            <div class="social-links">
-                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
-            </div>
-            <p>&copy; 2023 Myanmar FM Radio. All rights reserved.</p>
-        </div>
-    </footer>
-    
-    <!-- Notification element -->
-    <div class="notification" id="notification">
-        <i class="fas fa-volume-up"></i>
-        <span id="notification-text">Radio is now playing</span>
+    <div id="progress-container" aria-label="တေးမြေပုံတိုးချဲ့ပမာဏ" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+      <div id="progress"></div>
     </div>
-    
-    <script>
-        // Player functionality
-        const player = document.getElementById('radio-stream');
-        const playBtn = document.getElementById('play-btn');
-        const volumeControl = document.getElementById('volume');
-        const currentSong = document.getElementById('current-song');
-        const currentArtist = document.getElementById('current-artist');
-        const playlistItems = document.getElementById('playlist-items');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const notification = document.getElementById('notification');
-        const notificationText = document.getElementById('notification-text');
-        
-        // Sample playlist data
-        const playlist = [
-            { title: "Myanmar Traditional Music", artist: "Various Artists" },
-            { title: "Modern Pop Hits", artist: "International Artists" },
-            { title: "Golden Oldies", artist: "Classic Myanmar Songs" },
-            { title: "Chill Vibes", artist: "Relaxing Mix" },
-            { title: "Evening Serenade", artist: "Myanmar Ballads" },
-            { title: "Dance Party", artist: "DJ Mix" },
-            { title: "Country Roads", artist: "Folk Collection" },
-            { title: "Jazz Lounge", artist: "Smooth Jazz" }
-        ];
-        
-        // Initialize player - autoplay when page loads
-        player.volume = volumeControl.value;
-        
-        // Try to autoplay (may be blocked by browser)
-        const playPromise = player.play();
-        
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                // Autoplay started
-                showNotification("Radio is now playing");
-            })
-            .catch(error => {
-                // Autoplay was prevented
-                showNotification("Click the play button to start listening");
-                playBtn.innerHTML = '<i class="fas fa-play"></i>';
-            });
+    <div id="time" aria-live="polite" aria-atomic="true">00:00 / 00:00</div>
+
+    <h2>အစီအစဉ် အချိန်ဇယား (Program Schedule)</h2>
+    <section id="program-schedule" style="color:#f0c4d9; font-size: 0.9rem; line-height:1.3; user-select:none;">
+      <p><strong>နံနက် ၅း၀၀ - ၁၂း၀၀</strong> - တရားတော်များ၊ နေ့စဉ် သီချင်းများနှင့် ဗဟုသုတရေးရာအဖြာဖြာ</p>
+      <p><strong>မွန်းလွဲ ၁၂း၀၀ - ၃း၀၀</strong> - ဇာတ်လမ်းပမာ နားဆင်စရာများနှင့် တွေ့ဆုံပွဲများ</p>
+      <p><strong>နေ့လည် ၃း၀၀ - ၆း၀၀</strong> - မြန်မာသံစဉ်များနှင့် အသိပညာအတတ်ပညာများဆွေးနွေး ပြောကြားခြင်း</p>
+      <p><strong>ညနေ ၆း၀၀ - ၉း၀၀</strong> - တေးဂီတ အထူးအစီအစဉ်</p>
+      <p><strong>ည ၉း၀၀ - ၁၁း၀၀</strong> - အိပ်ယာဝင်တေးသံစဉ် ဂီတ နှင့် အလွမ်းတေးများ</p>
+    </section>
+  </main>
+  <footer>© 2024 FM AutoDJ ရေဒီယို</footer>
+
+  <script>
+    (function(){
+      // Example playlist using GitHub raw URLs to mp3 files - replace YOUR_USERNAME and REPO_NAME and path accordingly
+      const playlist = [
+        {
+          title: "song1.mp3",
+          artist: "John sai moon",
+          src: "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/mp3/song1.mp3"
+        },
+        {
+          title: "song2.mp3",
+          artist: "Ma Nyein Ei Ei Htwe",
+          src: "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/mp3/song2.mp3"
+        },
+        {
+          title: "song3.mp3",
+          artist: "Aung Kaung",
+          src: "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/mp3/song3.mp3"
         }
-        
-        // Show notification function
-        function showNotification(message) {
-            notificationText.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+      ];
+
+      const playlistEl = document.getElementById('playlist');
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const progressContainer = document.getElementById('progress-container');
+      const progress = document.getElementById('progress');
+      const timeEl = document.getElementById('time');
+
+      const audio = new Audio();
+      let currentIndex = 0;
+      let isPlaying = false;
+
+      // Build playlist UI with details
+      function buildPlaylist() {
+        playlist.forEach((track, i) => {
+          const li = document.createElement('li');
+          li.setAttribute('tabindex', '0');
+          li.dataset.index = i;
+          li.innerHTML =
+            '<span class="track-number">' + (i + 1) + '</span>' +
+            '<span class="track-title">' + track.title + '</span>' +
+            '<span class="track-artist">' + track.artist + '</span>';
+          li.addEventListener('click', () => {
+            loadTrack(i);
+            playAudio();
+          });
+          li.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              loadTrack(i);
+              playAudio();
+            }
+          });
+          playlistEl.appendChild(li);
+        });
+      }
+
+      function loadTrack(index) {
+        if(index < 0) index = playlist.length - 1;
+        else if(index >= playlist.length) index = 0;
+        currentIndex = index;
+        audio.src = playlist[index].src;
+        audio.load();
+        updatePlaylistUI();
+        updateTime(0, 0);
+        progress.style.width = '0%';
+      }
+
+      function playAudio() {
+        audio.play();
+        isPlaying = true;
+        updatePlayPauseButton();
+        updatePlaylistUI();
+      }
+
+      function pauseAudio() {
+        audio.pause();
+        isPlaying = false;
+        updatePlayPauseButton();
+      }
+
+      function togglePlayPause() {
+        if(isPlaying) pauseAudio();
+        else playAudio();
+      }
+
+      function nextTrack() {
+        loadTrack(currentIndex + 1);
+        playAudio();
+      }
+
+      function prevTrack() {
+        loadTrack(currentIndex - 1);
+        playAudio();
+      }
+
+      function updatePlaylistUI() {
+        const lis = playlistEl.querySelectorAll('li');
+        lis.forEach(li => li.classList.remove('playing'));
+        const currentLi = playlistEl.querySelector('li[data-index="'+currentIndex+'"]');
+        if(currentLi) currentLi.classList.add('playing');
+      }
+
+      function formatTime(seconds) {
+        let m = Math.floor(seconds / 60);
+        let s = Math.floor(seconds % 60);
+        return (m < 10 ? '0'+m : m) + ':' + (s < 10 ? '0'+s : s);
+      }
+
+      function updateTime(current, duration) {
+        timeEl.textContent = formatTime(current) + ' / ' + formatTime(duration);
+      }
+
+      audio.addEventListener('timeupdate', () => {
+        if(audio.duration) {
+          const percent = (audio.currentTime / audio.duration) * 100;
+          progress.style.width = percent + '%';
+          updateTime(audio.currentTime, audio.duration);
+
+          if(progressContainer){
+            progressContainer.setAttribute('aria-valuenow', Math.floor(percent));
+          }
         }
-        
-        // Update play/pause button
-        player.addEventListener('play', () => {
-            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            loadingIndicator.style.display = 'none';
-        });
-        
-        player.addEventListener('pause', () => {
-            playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        });
-        
-        player.addEventListener('waiting', () => {
-            loadingIndicator.style.display = 'flex';
-        });
-        
-        player.addEventListener('playing', () => {
-            loadingIndicator.style.display = 'none';
-        });
-        
-        player.addEventListener('error', () => {
-            currentSong.textContent = "Error loading stream";
-            currentArtist.textContent = "Please try again later";
-            loadingIndicator.style.display = 'none';
-            showNotification("Error connecting to radio stream");
-        });
-        
-        // Play/pause button click
-        playBtn.addEventListener('click', () => {
-            if (player.paused) {
-                player.play()
-                    .then(() => showNotification("Radio is now playing"))
-                    .catch(e => showNotification("Please interact to play"));
-            } else {
-                player.pause();
-                showNotification("Radio paused");
-            }
-        });
-        
-        // Volume control
-        volumeControl.addEventListener('input', () => {
-            player.volume = volumeControl.value;
-            
-            // Show volume level notification
-            if (player.volume === 0) {
-                showNotification("Volume muted");
-            } else {
-                showNotification(`Volume: ${Math.round(player.volume * 100)}%`);
-            }
-        });
-        
-        // Generate playlist
-        playlist.forEach((song, index) => {
-            const playlistItem = document.createElement('div');
-            playlistItem.className = 'playlist-item';
-            playlistItem.innerHTML = `
-                <div class="number">${index + 1}</div>
-                <div class="play-icon"><i class="fas fa-music"></i></div>
-                <div class="song-details">
-                    <div class="song-title">${song.title}</div>
-                    <div class="song-artist">${song.artist}</div>
-                </div>
-            `;
-            
-            playlistItem.addEventListener('click', () => {
-                // In a real app, this would play the selected song
-                currentSong.textContent = song.title;
-                currentArtist.textContent = song.artist;
-                
-                // Highlight the selected song
-                document.querySelectorAll('.playlist-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                playlistItem.classList.add('active');
-                
-                showNotification(`Now playing: ${song.title}`);
-            });
-            
-            playlistItems.appendChild(playlistItem);
-        });
-        
-        // Set the first song as currently playing
-        if (playlist.length > 0) {
-            currentSong.textContent = playlist[0].title;
-            currentArtist.textContent = playlist[0].artist;
-            playlistItems.children[0].classList.add('active');
+      });
+
+      audio.addEventListener('ended', () => {
+        nextTrack();
+      });
+
+      playPauseBtn.addEventListener('click', togglePlayPause);
+      prevBtn.addEventListener('click', prevTrack);
+      nextBtn.addEventListener('click', nextTrack);
+
+      progressContainer.addEventListener('click', (e) => {
+        const rect = progressContainer.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const width = rect.width;
+        if(audio.duration){
+          audio.currentTime = (clickX / width) * audio.duration;
         }
-        
-        // Simulate song changes (in a real app, this would come from the stream metadata)
-        setInterval(() => {
-            if (!player.paused) {
-                const currentIndex = playlist.findIndex(
-                    song => song.title === currentSong.textContent
-                );
-                const nextIndex = (currentIndex + 1) % playlist.length;
-                
-                currentSong.textContent = playlist[nextIndex].title;
-                currentArtist.textContent = playlist[nextIndex].artist;
-                
-                // Update active song in playlist
-                document.querySelectorAll('.playlist-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                playlistItems.children[nextIndex].classList.add('active');
-            }
-        }, 15000); // Change every 15 seconds
-        
-        // Form submission
-        document.querySelector('.contact-form').addEventListener('submit', (e) => {
+      });
+
+      progressContainer.addEventListener('keydown', (e) => {
+        if(audio.duration){
+          let step = audio.duration * 0.05;
+          if(e.key === 'ArrowLeft'){
             e.preventDefault();
-            showNotification("Thank you for your message!");
-            e.target.reset();
-        });
-        
-        // Show initial loading state
-        loadingIndicator.style.display = 'flex';
-    </script>
+            audio.currentTime = Math.max(0, audio.currentTime - step);
+          } else if(e.key === 'ArrowRight'){
+            e.preventDefault();
+            audio.currentTime = Math.min(audio.duration, audio.currentTime + step);
+          }
+        }
+      });
+
+      buildPlaylist();
+      loadTrack(0);
+    })();
+  </script>
 </body>
 </html>
+</content>
+</create_file>
