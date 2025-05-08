@@ -67,11 +67,13 @@
     overflow: hidden;
     margin-bottom: 1rem;
     display: none; /* Hidden by default */
+    position: relative;
   }
   #video-player {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    background: #000;
   }
   
   /* Headings */
@@ -246,7 +248,7 @@
   </header>
   <main>
     <div id="video-container">
-      <video id="video-player" controls></video>
+      <video id="video-player" playsinline></video>
     </div>
     
     <h2>Today's Playlist</h2>
@@ -289,9 +291,9 @@
           type: "audio"
         },
         {
-          title: "မြန်မာရုပ်ရှင်သီချင်း",
+          title: "မြန်မာရုပ်ရှင်သီချင်း (MP4)",
           artist: "အဆိုတော် - အောင်ထွန်းဦး",
-          src: "https://example.com/path/to/video.mp4",
+          src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
           type: "video"
         },
         {
@@ -353,9 +355,13 @@
         if(track.type === 'video') {
           // Hide audio player, show video player
           audio.pause();
+          isPlaying = false;
           videoContainer.style.display = 'block';
           videoPlayer.src = track.src;
           videoPlayer.load();
+          // iOS requires this for inline playback
+          videoPlayer.setAttribute('playsinline', '');
+          videoPlayer.setAttribute('webkit-playsinline', '');
         } else {
           // Hide video player, use audio player
           videoContainer.style.display = 'none';
@@ -365,22 +371,29 @@
         }
         
         updatePlaylistUI();
+        updatePlayPauseButton();
         updateTime(0, 0);
         progress.style.width = '0%';
       }
 
       function playMedia() {
         if(currentMediaType === 'video') {
-          videoPlayer.play()
-            .then(() => {
+          // Important: On mobile, this must be triggered by user gesture
+          const playPromise = videoPlayer.play();
+          
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
               isPlaying = true;
               updatePlayPauseButton();
               updatePlaylistUI();
             })
             .catch(error => {
               console.error("Video playback failed:", error);
-              alert("ဗီဒီယိုဖွင့်ရန် မအောင်မြင်ပါ။ ကျေးဇူးပြု၍ နောက်တစ်ကြိမ်ကြိုးစားကြည့်ပါ။");
+              alert("ဗီဒီယိုဖွင့်ရန် မအောင်မြင်ပါ။ ကျေးဇူးပြု၍ နောက်တစ်ကြိမ်ကြိုးစားကြည့်ပါ။\nError: " + error.message);
+              // Fallback to showing controls if autoplay fails
+              videoPlayer.setAttribute('controls', '');
             });
+          }
         } else {
           audio.play()
             .then(() => {
@@ -432,8 +445,8 @@
       }
 
       function formatTime(seconds) {
-        let m = Math.floor(seconds / 60);
-        let s = Math.floor(seconds % 60);
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
         return (m < 10 ? '0'+m : m) + ':' + (s < 10 ? '0'+s : s);
       }
 
@@ -457,7 +470,7 @@
 
       // Video event listeners
       videoPlayer.addEventListener('timeupdate', () => {
-        if(videoPlayer.duration) {
+        if(!isNaN(videoPlayer.duration) {
           const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
           progress.style.width = percent + '%';
           updateTime(videoPlayer.currentTime, videoPlayer.duration);
@@ -479,17 +492,17 @@
         const clickX = e.clientX - rect.left;
         const width = rect.width;
         
-        if(currentMediaType === 'video' && videoPlayer.duration) {
+        if(currentMediaType === 'video' && !isNaN(videoPlayer.duration)) {
           videoPlayer.currentTime = (clickX / width) * videoPlayer.duration;
-        } else if(audio.duration) {
+        } else if(!isNaN(audio.duration)) {
           audio.currentTime = (clickX / width) * audio.duration;
         }
       });
 
       progressContainer.addEventListener('keydown', (e) => {
         let duration = currentMediaType === 'video' ? videoPlayer.duration : audio.duration;
-        if(duration){
-          let step = duration * 0.05;
+        if(!isNaN(duration)){
+          const step = duration * 0.05;
           if(e.key === 'ArrowLeft'){
             e.preventDefault();
             if(currentMediaType === 'video') {
@@ -516,7 +529,24 @@
 
       videoPlayer.addEventListener('error', function() {
         console.error("Video error:", videoPlayer.error);
-        alert("ဗီဒီယိုဖွင့်ရာတွင် အမှားတစ်ခုဖြစ်ပေါ်နေပါသည်။");
+        let message = "ဗီဒီယိုဖွင့်ရာတွင် အမှားတစ်ခုဖြစ်ပေါ်နေပါသည်။";
+        switch(videoPlayer.error.code) {
+          case 1:
+            message += "\n(မှတ်ချက်: ဗီဒီယိုဖိုင်ကို ရှာမတွေ့ပါ)";
+            break;
+          case 2:
+            message += "\n(မှတ်ချက်: ဗီဒီယိုဖိုင်အမျိုးအစား မမှန်ပါ)";
+            break;
+          case 3:
+            message += "\n(မှတ်ချက်: ဗီဒီယိုကို ဒေါင်းလုဒ်ဆွဲရာတွင် အမှားဖြစ်နေပါသည်)";
+            break;
+          case 4:
+            message += "\n(မှတ်ချက်: ဗီဒီယိုကို ဖွင့်၍မရပါ)";
+            break;
+        }
+        alert(message);
+        // Fallback to showing controls if error occurs
+        videoPlayer.setAttribute('controls', '');
       });
 
       // Initialize
