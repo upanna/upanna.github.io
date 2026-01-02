@@ -1,17 +1,19 @@
 backend:
   name: git-gateway
-  branch: main # သင့် GitHub branch အမည် (main သို့မဟုတ် master) မှန်အောင် စစ်ပါ
+  branch: main # သင့် GitHub branch အမည် (main သို့မဟုတ် master) ဖြစ်ကြောင်း သေချာပါစေ
 
-media_folder: "static/images"
+media_folder: "static/images" # ဓာတ်ပုံတင်ရင် သိမ်းမယ့်နေရာ
 public_folder: "/images"
 
 collections:
   - name: "blog"
-    label: "University Posts"
-    folder: "content/posts" # ဒီ folder ထဲမှာ post တွေ သွားသိမ်းမှာပါ
-    create: true
+    label: "Dhammaduta Blog Posts"
+    folder: "static/posts" # Blog စာသားဖိုင်တွေ သိမ်းမယ့်နေရာ
+    create: true # Post အသစ်တိုးခွင့်ပြုသည်
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Category", name: "category", widget: "select", options: ["Diploma", "B.A", "M.A", "M.Phil", "Ph.D"] }
-      - { label: "Publish Date", name: "date", widget: "datetime" }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - { label: "ခေါင်းစဉ် (Title)", name: "title", widget: "string" }
+      - { label: "အတန်း (Category)", name: "category", widget: "select", options: ["Diploma", "B.A", "M.A", "M.Phil", "Ph.D"] }
+      - { label: "ရက်စွဲ (Date)", name: "date", widget: "datetime" }
+      - { label: "ဓာတ်ပုံ (Featured Image)", name: "image", widget: "image", required: false }
+      - { label: "စာသားများ (Body)", name: "body", widget: "markdown" }
