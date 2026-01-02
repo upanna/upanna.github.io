@@ -1,0 +1,17 @@
+backend:
+  name: git-gateway
+  branch: main # သင့် GitHub branch အမည် (main သို့မဟုတ် master) မှန်အောင် စစ်ပါ
+
+media_folder: "static/images"
+public_folder: "/images"
+
+collections:
+  - name: "blog"
+    label: "University Posts"
+    folder: "content/posts" # ဒီ folder ထဲမှာ post တွေ သွားသိမ်းမှာပါ
+    create: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Category", name: "category", widget: "select", options: ["Diploma", "B.A", "M.A", "M.Phil", "Ph.D"] }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }
